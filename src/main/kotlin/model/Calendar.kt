@@ -1,9 +1,7 @@
 package model
 
 class Calendar(year: Int) {
-    private val _daysOfTheWeek = arrayOf("Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado")
     private var _year = year
-
     private var _isLeapYear = false
     private val _doomsday = getDoomsDayOfYear()
 
@@ -21,7 +19,8 @@ class Calendar(year: Int) {
         7,                              // 7/11
         12                              // 12/12
     )
-    private val _monthsPlusFirstDay = getMonthsFirstDay()
+
+    val monthsPlusFirstDay = getMonthsFirstDay()
 
     private fun getDoomsDayOfYear(): Int {
         val secondHalf = _year.mod(100)
@@ -49,20 +48,22 @@ class Calendar(year: Int) {
 
     private fun Int.toDayOfWeek(): String {
         return if (this in 0..6) {
-            _daysOfTheWeek[this]
+            DaysOfTheWeek.values()[this].longName
         } else {
             "Int must be between 0 and 6"
         }
     }
 
+    fun isLeapYear() = _isLeapYear
+
     fun printCalendar(month: TwelveMonths) {
         val numberOfDays = month.numberOfDays
-        val startingDayOfTheWeek = _monthsPlusFirstDay[month.ordinal] //Starting day of the week
+        val startingDayOfTheWeek = monthsPlusFirstDay[month.ordinal] //Starting day of the week
         var dayOfTheWeek = 0
         var drawBlank = true
         var day = 1
 
-        println("Year: $_year   ${month.monthName}")
+        println("Year: $_year ${month.monthName}  DD: ${_doomsday.toDayOfWeek()}")
         println("_______________________")
         println("  D  L  M  M  J  V  S")
         for (x in 1..35) {
@@ -90,5 +91,12 @@ class Calendar(year: Int) {
 }
 
 fun main() {
-    Calendar(2024).printCalendar(TwelveMonths.TWO)
+    var calendar = Calendar(2024)
+    calendar.printCalendar(TwelveMonths.TWO)
+    println("Is leap year : ${calendar.isLeapYear()}\n")
+
+    calendar = Calendar(1800)
+    calendar.printCalendar(TwelveMonths.ONE)
+    println("Is leap year? : ${calendar.isLeapYear()}\n")
+
 }
