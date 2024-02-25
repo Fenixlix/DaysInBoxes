@@ -1,5 +1,6 @@
 package ui_components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -12,104 +13,82 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import model.DaysOfTheWeek
-import model.TwelveMonths
 
 @Composable
 fun CalendarMonth(
-    month: TwelveMonths,
-    firstDayOfTheWeek: Int,
-    isLeapYear: Boolean
+    monthName: String,
+    weeks: List<List<Int?>>,
+    externalBorderColor: Color = Color.Black,
+    separatorLinesColor: Color = Color.Black,
+    monthBackgroundColor: Color = Color.LightGray,
+    daysBackgroundColor: Color = Color.LightGray,
+    monthTextColor: Color = Color.Blue,
+    daysTextColor: Color = Color.Blue
 ) {
-    val monthBoxWidth = 240.dp
-    val weeks = getDaysOfWeeks(
-        numberOfDaysOfMonth = month.numberOfDays,
-        startingDayOfTheWeek = firstDayOfTheWeek,
-        isLeapYear = isLeapYear
-    )
 
     Column(
-        modifier = Modifier.wrapContentSize().border(width = 4.dp, color = Color.DarkGray).padding(8.dp)
+        modifier = Modifier
+            .wrapContentSize()
+            .border(width = 4.dp, color = externalBorderColor)
     ) {
         Text(
-            modifier = Modifier.width(monthBoxWidth).border(width = 2.dp, color = Color.Green).padding(vertical = 4.dp),
-            text = month.monthName,
+            modifier = Modifier
+                .width(240.dp)
+                .background(color = monthBackgroundColor)
+                .padding(vertical = 4.dp),
+            text = monthName,
             textAlign = TextAlign.Center,
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            color = monthTextColor
         )
+
+        Spacer(modifier = Modifier.height(4.dp).width(240.dp).background(color = separatorLinesColor))
+
         Row(
-            modifier = Modifier.width(monthBoxWidth),
+            modifier = Modifier
+                .width(240.dp)
+                .background(color = daysBackgroundColor)
+                .padding(start = 4.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             DaysOfTheWeek.values().iterator().forEach {
                 Text(
-                    modifier = Modifier.padding(4.dp).width(26.dp),
+                    modifier = Modifier
+                        .width(30.dp)
+                        .padding(end = 4.dp, top = 2.dp, bottom = 2.dp),
                     text = it.shortName,
                     textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = daysTextColor
                 )
             }
         }
 
+        Spacer(modifier = Modifier.height(2.dp).width(240.dp).background(color = separatorLinesColor))
+
         weeks.forEach { week ->
             Row(
-                modifier = Modifier.width(monthBoxWidth),
+                modifier = Modifier
+                    .width(240.dp)
+                    .background(color = daysBackgroundColor)
+                    .padding(start = 4.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 week.forEach {
                     Text(
-                        modifier = Modifier.padding(4.dp).width(26.dp),
+                        modifier = Modifier
+                            .width(30.dp)
+                            .padding(end = 4.dp, top = 4.dp, bottom = 4.dp),
                         text = it?.toString() ?: " ",
-                        textAlign = TextAlign.Right
+                        textAlign = TextAlign.Center,
+                        color = daysTextColor
                     )
                 }
             }
         }
-
+        Spacer(modifier = Modifier.height(4.dp))
     }
-}
-
-fun getDaysOfWeeks(numberOfDaysOfMonth: Int, startingDayOfTheWeek: Int, isLeapYear: Boolean): List<List<Int?>> {
-    val numberOfDays = if (numberOfDaysOfMonth == 28 && isLeapYear) 29 else numberOfDaysOfMonth
-    var dayOfTheWeek = 0
-    var drawBlank = true
-    var day = 1
-
-    var week = mutableListOf<Int?>()
-    val weeks = mutableListOf<List<Int?>>()
-
-    for (x in 1..35) {
-        if (dayOfTheWeek == startingDayOfTheWeek) {
-            drawBlank = false
-        }
-        if (drawBlank) {
-            week.add(null)
-        } else {
-            week.add(day++)
-            if (day > numberOfDays) drawBlank = true
-        }
-        dayOfTheWeek++
-        // Reset the week
-        if (x.mod(7) == 0) {
-            weeks.add(week)
-            week = arrayListOf()
-            dayOfTheWeek = 0
-        }
-    }
-    day--
-    if (day < numberOfDaysOfMonth) {
-        var diff = numberOfDays - day++
-        val newList = weeks[0].map {
-            if (diff > 0) {
-                diff--
-                day++
-            } else
-                it
-        }
-        weeks.removeAt(0)
-        weeks.add(0, newList)
-    }
-    return weeks
 }
