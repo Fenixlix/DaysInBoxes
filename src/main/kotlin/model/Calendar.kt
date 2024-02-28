@@ -1,6 +1,6 @@
 package model
 
-class Calendar(private val year: Int = 0) {
+class Calendar(val year: Int = 0) {
 
     private var _doomsday = 0
     private var _monthsFirstDay = emptyList<Int>()
@@ -118,7 +118,7 @@ class Calendar(private val year: Int = 0) {
         }
     }
 
-    fun printCalendar(month: TwelveMonths) {
+    fun printMonthOfCalendar(month: TwelveMonths) {
         val numberOfDays = month.numberOfDays
         val startingDayOfTheWeek = _monthsFirstDay[month.ordinal] //Starting day of the week
         var dayOfTheWeek = 0
@@ -165,7 +165,7 @@ class Calendar(private val year: Int = 0) {
 
 fun main() {
     val calendar = Calendar(2025)
-    calendar.printCalendar(TwelveMonths.THREE)
+    calendar.printMonthOfCalendar(TwelveMonths.THREE)
     println("Is leap year : ${calendar.isLeapYear()}\n")
 
     print(calendar.monthWeeks[TwelveMonths.THREE.ordinal])

@@ -16,8 +16,8 @@ import model.CustomColor
 fun ColorSelectTool(color: CustomColor, onColorChange: (CustomColor) -> Unit) {
 
     Row(
-        modifier = Modifier.width(300.dp),
-        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize().padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
@@ -43,7 +43,6 @@ fun ColorSelectTool(color: CustomColor, onColorChange: (CustomColor) -> Unit) {
                 onValueChange = { onColorChange(color.copy(lightness = it)) }
             )
         }
-        Spacer(modifier = Modifier.width(8.dp))
         Box(
             modifier = Modifier
                 .size(80.dp)
@@ -62,9 +61,12 @@ private fun ColorSlider(
     sliderValue: Float,
     onValueChange: (Float) -> Unit
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
         Slider(
-            modifier = Modifier.width(120.dp),
+            modifier = Modifier.width(180.dp),
             value = sliderValue,
             onValueChange = { onValueChange(it) },
             valueRange = propertyRange,

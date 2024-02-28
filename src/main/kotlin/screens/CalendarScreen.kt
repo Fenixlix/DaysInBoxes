@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import ui_components.CalendarMonth
 
 @Composable
 fun CalendarScreen(
+    isVertical: Boolean,
     calendar: Calendar,
     calendarBgColor: CustomColor,
     monthBgColor: CustomColor,
@@ -27,24 +29,47 @@ fun CalendarScreen(
     boxLinesColor: CustomColor,
     separatorLinesColor: CustomColor
 ) {
-    LazyVerticalGrid(
-        modifier = Modifier.wrapContentSize().background(calendarBgColor.toColor()),
-        columns = GridCells.Adaptive(240.dp),
-        contentPadding = PaddingValues(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(TwelveMonths.values()) { month ->
-            CalendarMonth(
-                month.monthName,
-                calendar.monthWeeks[month.ordinal],
-                monthBackgroundColor = monthBgColor.toColor(),
-                daysBackgroundColor = daysBgColor.toColor(),
-                monthTextColor = monthTxColor.toColor(),
-                daysTextColor = daysTxColor.toColor(),
-                externalBorderColor = boxLinesColor.toColor(),
-                separatorLinesColor = separatorLinesColor.toColor()
-            )
+    if (isVertical) {
+        LazyVerticalGrid(
+            modifier = Modifier.wrapContentSize().background(calendarBgColor.toColor()),
+            columns = GridCells.Adaptive(240.dp),
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(TwelveMonths.values()) { month ->
+                CalendarMonth(
+                    month.monthName,
+                    calendar.monthWeeks[month.ordinal],
+                    monthBackgroundColor = monthBgColor.toColor(),
+                    daysBackgroundColor = daysBgColor.toColor(),
+                    monthTextColor = monthTxColor.toColor(),
+                    daysTextColor = daysTxColor.toColor(),
+                    externalBorderColor = boxLinesColor.toColor(),
+                    separatorLinesColor = separatorLinesColor.toColor()
+                )
+            }
+        }
+    } else {
+        LazyHorizontalGrid(
+            modifier = Modifier.wrapContentSize().background(calendarBgColor.toColor()),
+            rows = GridCells.Adaptive(200.dp),
+            contentPadding = PaddingValues(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(TwelveMonths.values()) { month ->
+                CalendarMonth(
+                    month.monthName,
+                    calendar.monthWeeks[month.ordinal],
+                    monthBackgroundColor = monthBgColor.toColor(),
+                    daysBackgroundColor = daysBgColor.toColor(),
+                    monthTextColor = monthTxColor.toColor(),
+                    daysTextColor = daysTxColor.toColor(),
+                    externalBorderColor = boxLinesColor.toColor(),
+                    separatorLinesColor = separatorLinesColor.toColor()
+                )
+            }
         }
     }
 }
